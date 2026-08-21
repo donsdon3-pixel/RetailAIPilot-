@@ -11,6 +11,7 @@ import {
   Supplier,
 } from './types';
 import { MCPTools, DataContext } from './mcp-tools';
+import { formatCurrency } from './format';
 
 export interface WorkflowResult {
   workflow_name: string;
@@ -83,7 +84,7 @@ export class AutomationService {
         organization_id: organizationId,
         alert_type: 'DEAD_STOCK',
         severity: 'WARNING',
-        title: `Dead Stock Audit: $${totalDeadCapital.toFixed(2)} Stagnant Capital Detected`,
+        title: `Dead Stock Audit: ${formatCurrency(totalDeadCapital)} Stagnant Capital Detected`,
         message: `Bi-weekly audit identified ${deadStock.length} SKUs with zero sales in >60 days. Liquidation discount plans generated automatically.`,
         is_read: false,
         action_url: '/ai-assistant',
@@ -94,7 +95,7 @@ export class AutomationService {
     return {
       workflow_name: 'Dead Stock Bi-Weekly Audit',
       execution_status: deadStock.length > 0 ? 'WARNING' : 'SUCCESS',
-      summary: `Bi-weekly audit scanned full organization catalog. Identified ${deadStock.length} stagnant SKUs representing $${totalDeadCapital.toFixed(2)} in tied-up working capital.`,
+      summary: `Bi-weekly audit scanned full organization catalog. Identified ${deadStock.length} stagnant SKUs representing ${formatCurrency(totalDeadCapital)} in tied-up working capital.`,
       alerts_generated: alerts,
       payload: {
         totalDeadCapital,
@@ -129,7 +130,7 @@ export class AutomationService {
         organization_id: organizationId,
         alert_type: 'SUPPLIER_PAYMENT',
         severity: sup.escalation_status === 'OVERDUE' ? 'CRITICAL' : 'WARNING',
-        title: `Payment Escalation: ${sup.supplier_name} ($${sup.outstanding_balance.toFixed(2)})`,
+        title: `Payment Escalation: ${sup.supplier_name} (${formatCurrency(sup.outstanding_balance)})`,
         message: `Pending invoice due by ${sup.nearest_due_date}. Credit term: ${sup.credit_period_days} days. Escalate to Accounts / Store Manager to maintain credit lines.`,
         is_read: false,
         action_url: '/purchases',
@@ -164,8 +165,8 @@ export class AutomationService {
       organization_id: organizationId,
       alert_type: 'EOD_SALES',
       severity: 'INFO',
-      title: `Daily End-of-Day Sales Dossier: $${dayGrossRevenue.toFixed(2)} Gross Revenue`,
-      message: `Completed ${orgSales.length} transactions today. Gross Profit: $${dayGrossProfit.toFixed(2)} (${dayGrossRevenue > 0 ? ((dayGrossProfit / dayGrossRevenue) * 100).toFixed(1) : 0}% margin). Zero transaction errors logged.`,
+      title: `Daily End-of-Day Sales Dossier: ${formatCurrency(dayGrossRevenue)} Gross Revenue`,
+      message: `Completed ${orgSales.length} transactions today. Gross Profit: ${formatCurrency(dayGrossProfit)} (${dayGrossRevenue > 0 ? ((dayGrossProfit / dayGrossRevenue) * 100).toFixed(1) : 0}% margin). Zero transaction errors logged.`,
       is_read: false,
       action_url: '/sales',
       created_at: new Date().toISOString(),
@@ -174,7 +175,7 @@ export class AutomationService {
     return {
       workflow_name: 'Daily End-of-Day Sales Dossier',
       execution_status: 'SUCCESS',
-      summary: `Aggregated daily close: $${dayGrossRevenue.toFixed(2)} gross revenue across ${orgSales.length} orders. Pushed dossier to Executive Owner.`,
+      summary: `Aggregated daily close: ${formatCurrency(dayGrossRevenue)} gross revenue across ${orgSales.length} orders. Pushed dossier to Executive Owner.`,
       alerts_generated: [alert],
       payload: {
         totalRevenue: dayGrossRevenue,
@@ -204,7 +205,7 @@ export class AutomationService {
       alert_type: 'MONTHLY_REPORT',
       severity: 'INFO',
       title: `Monthly Executive AI Dossier Generated (${report.period_month})`,
-      message: `Net Profit: $${report.net_profit.toFixed(2)} | Low-Stock SKUs: ${report.low_stock_sku_count} | Dead Capital: $${report.dead_stock_capital_at_risk.toFixed(2)}. Strategic AI action items compiled.`,
+      message: `Net Profit: ${formatCurrency(report.net_profit)} | Low-Stock SKUs: ${report.low_stock_sku_count} | Dead Capital: ${formatCurrency(report.dead_stock_capital_at_risk)}. Strategic AI action items compiled.`,
       is_read: false,
       action_url: '/ai-assistant',
       created_at: new Date().toISOString(),

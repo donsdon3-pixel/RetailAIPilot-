@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { AppStore, AppState } from '@/lib/store';
 import { Product, PaymentMethod, PaymentRecord, SalesOrder, Customer } from '@/lib/types';
 import { LedgerService } from '@/lib/ledger-service';
+import { formatCurrency, CURRENCY_SYMBOL } from '@/lib/format';
 import {
   Search,
   Barcode,
@@ -146,7 +147,7 @@ export default function POSTerminal() {
 
   const handleCompleteSale = () => {
     if (Math.abs(totalPaid - totalAmount) > 0.05) {
-      alert(`Payment discrepancy: Total due is $${totalAmount.toFixed(2)}, paid $${totalPaid.toFixed(2)}`);
+      alert(`Payment discrepancy: Total due is ${formatCurrency(totalAmount)}, paid ${formatCurrency(totalPaid)}`);
       return;
     }
 
@@ -295,7 +296,7 @@ export default function POSTerminal() {
 
                 <div className="mt-3 flex items-center justify-between pt-2 border-t border-slate-100">
                   <div className="text-sm font-black text-slate-900 font-mono">
-                    ${p.selling_price.toFixed(2)}
+                    {formatCurrency(p.selling_price)}
                   </div>
                   <button
                     disabled={isOutOfStock}
@@ -357,7 +358,7 @@ export default function POSTerminal() {
                 <div className="overflow-hidden flex-1">
                   <div className="text-xs font-bold text-slate-800 truncate">{item.product.name}</div>
                   <div className="text-[10px] text-slate-400 font-mono">
-                    ${item.product.selling_price.toFixed(2)} each
+                    {formatCurrency(item.product.selling_price)} each
                   </div>
                 </div>
 
@@ -397,7 +398,7 @@ export default function POSTerminal() {
           <div className="space-y-1.5 text-xs text-slate-600">
             <div className="flex justify-between">
               <span>Subtotal:</span>
-              <span className="font-mono font-medium">${subtotal.toFixed(2)}</span>
+              <span className="font-mono font-medium">{formatCurrency(subtotal)}</span>
             </div>
 
             {/* Discount selector */}
@@ -417,11 +418,11 @@ export default function POSTerminal() {
 
             <div className="flex justify-between">
               <span>Tax ({taxRate}%):</span>
-              <span className="font-mono font-medium">${taxAmount.toFixed(2)}</span>
+              <span className="font-mono font-medium">{formatCurrency(taxAmount)}</span>
             </div>
             <div className="flex justify-between text-sm font-black text-slate-900 pt-2 border-t border-slate-200">
               <span>Total Due:</span>
-              <span className="font-mono text-emerald-600">${totalAmount.toFixed(2)}</span>
+              <span className="font-mono text-emerald-600">{formatCurrency(totalAmount)}</span>
             </div>
           </div>
 
@@ -431,7 +432,7 @@ export default function POSTerminal() {
             className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-lg shadow-emerald-600/20 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             <CreditCard className="w-4 h-4" />
-            Proceed to Split Checkout (${totalAmount.toFixed(2)})
+            Proceed to Split Checkout ({formatCurrency(totalAmount)})
           </button>
         </div>
       </div>
@@ -444,7 +445,7 @@ export default function POSTerminal() {
               <div>
                 <h3 className="font-bold text-base text-slate-900">Multi-Method Split Payment</h3>
                 <p className="text-xs text-slate-500">
-                  Total Amount Due: <span className="font-bold text-emerald-600 font-mono">${totalAmount.toFixed(2)}</span>
+                  Total Amount Due: <span className="font-bold text-emerald-600 font-mono">{formatCurrency(totalAmount)}</span>
                 </p>
               </div>
               <button
@@ -480,7 +481,7 @@ export default function POSTerminal() {
                   </select>
 
                   <div className="relative flex-1">
-                    <span className="absolute left-3 top-2 text-xs font-bold text-slate-400">$</span>
+                    <span className="absolute left-3 top-2 text-xs font-bold text-slate-400">{CURRENCY_SYMBOL}</span>
                     <input
                       type="number"
                       step="0.01"
@@ -513,7 +514,7 @@ export default function POSTerminal() {
                   onClick={handleAddPaymentSplit}
                   className="text-xs text-emerald-600 hover:text-emerald-700 font-bold flex items-center gap-1.5 py-1"
                 >
-                  <Plus className="w-3.5 h-3.5" /> Add Another Split Tender (Remaining: ${remainingDue.toFixed(2)})
+                  <Plus className="w-3.5 h-3.5" /> Add Another Split Tender (Remaining: {formatCurrency(remainingDue)})
                 </button>
               )}
             </div>
@@ -522,7 +523,7 @@ export default function POSTerminal() {
             <div className="p-3 rounded-xl bg-slate-100 flex items-center justify-between text-xs font-medium">
               <div>
                 <span>Total Paid: </span>
-                <span className="font-bold font-mono text-slate-900">${totalPaid.toFixed(2)}</span>
+                <span className="font-bold font-mono text-slate-900">{formatCurrency(totalPaid)}</span>
               </div>
               <div>
                 <span>Remaining: </span>
@@ -531,7 +532,7 @@ export default function POSTerminal() {
                     remainingDue === 0 ? 'text-emerald-600' : 'text-rose-600'
                   }`}
                 >
-                  ${remainingDue.toFixed(2)}
+                  {formatCurrency(remainingDue)}
                 </span>
               </div>
             </div>
@@ -632,9 +633,9 @@ export default function POSTerminal() {
                   <div key={i} className="py-1 flex justify-between">
                     <div>
                       <div>{item.product_name}</div>
-                      <div className="text-[10px] text-slate-500">{item.quantity} x ${item.unit_price.toFixed(2)}</div>
+                      <div className="text-[10px] text-slate-500">{item.quantity} x {formatCurrency(item.unit_price)}</div>
                     </div>
-                    <div className="font-bold">${item.subtotal.toFixed(2)}</div>
+                    <div className="font-bold">{formatCurrency(item.subtotal)}</div>
                   </div>
                 ))}
               </div>
@@ -642,21 +643,21 @@ export default function POSTerminal() {
               <div className="pt-2 border-t border-dashed border-slate-300 space-y-1">
                 <div className="flex justify-between">
                   <span>Subtotal:</span>
-                  <span>${completedOrder.subtotal.toFixed(2)}</span>
+                  <span>{formatCurrency(completedOrder.subtotal)}</span>
                 </div>
                 {completedOrder.discount_amount > 0 && (
                   <div className="flex justify-between text-emerald-700">
                     <span>Discount:</span>
-                    <span>-${completedOrder.discount_amount.toFixed(2)}</span>
+                    <span>-{formatCurrency(completedOrder.discount_amount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span>Tax:</span>
-                  <span>${completedOrder.tax_amount.toFixed(2)}</span>
+                  <span>{formatCurrency(completedOrder.tax_amount)}</span>
                 </div>
                 <div className="flex justify-between font-bold text-xs pt-1 border-t border-slate-300">
                   <span>TOTAL:</span>
-                  <span>${completedOrder.total_amount.toFixed(2)}</span>
+                  <span>{formatCurrency(completedOrder.total_amount)}</span>
                 </div>
               </div>
 
@@ -665,7 +666,7 @@ export default function POSTerminal() {
                 {completedOrder.payments.map((p, i) => (
                   <div key={i} className="flex justify-between text-[10px] text-slate-600">
                     <span>{p.payment_method}:</span>
-                    <span>${p.amount.toFixed(2)}</span>
+                    <span>{formatCurrency(p.amount)}</span>
                   </div>
                 ))}
               </div>

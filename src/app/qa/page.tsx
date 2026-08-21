@@ -26,7 +26,7 @@ interface TestCase {
 const ALL_50_TEST_CASES: TestCase[] = [
   // 1. Functional Tests (25 Cases)
   { id: 'FT-01', domain: 'Functional', name: 'Stock Deduction on POS Sale', scope: 'Inventory ledger writes -qty on checkout', expected: 'Current balance decrements by exact purchased units', status: 'PASS' },
-  { id: 'FT-02', domain: 'Functional', name: 'Multi-tender Split Payment Calculation', scope: 'Cash + Card + UPI combined tender validation', expected: 'Validates exact total balance match ($0.00 remainder)', status: 'PASS' },
+  { id: 'FT-02', domain: 'Functional', name: 'Multi-tender Split Payment Calculation', scope: 'Cash + Card + UPI combined tender validation', expected: 'Validates exact total balance match (₹0.00 remainder)', status: 'PASS' },
   { id: 'FT-03', domain: 'Functional', name: 'Return Restockable Reversal', scope: 'Customer return marked RESTOCKABLE', expected: 'Writes RETURN movement and increments stock balance', status: 'PASS' },
   { id: 'FT-04', domain: 'Functional', name: 'Return Damaged Write-off', scope: 'Customer return marked DAMAGED', expected: 'Writes RETURN then DAMAGED movement, netting 0 sellable stock', status: 'PASS' },
   { id: 'FT-05', domain: 'Functional', name: 'Branch Transfer: Draft to Requested', scope: 'State transition DRAFT -> REQUESTED', expected: 'Status advances without affecting stock levels', status: 'PASS' },
@@ -36,7 +36,7 @@ const ALL_50_TEST_CASES: TestCase[] = [
   { id: 'FT-09', domain: 'Functional', name: 'Goods Receipt Note (GRN) Intake', scope: 'GRN inspection approved on delivered PO', expected: 'Writes PURCHASE movement to immutable ledger', status: 'PASS' },
   { id: 'FT-10', domain: 'Functional', name: 'Sales Tax Rate Computation', scope: 'Calculates variable tax per org (e.g. 8.25%)', expected: 'Tax amount computed accurately on taxable subtotal', status: 'PASS' },
   { id: 'FT-11', domain: 'Functional', name: 'VIP Discount Application', scope: 'Applies percentage discount on cart subtotal', expected: 'Deducts discount before tax computation', status: 'PASS' },
-  { id: 'FT-12', domain: 'Functional', name: 'Loyalty Points Accrual', scope: 'Registered customer purchases items', expected: 'Increments loyalty points by 1 point per $1 spent', status: 'PASS' },
+  { id: 'FT-12', domain: 'Functional', name: 'Loyalty Points Accrual', scope: 'Registered customer purchases items', expected: 'Increments loyalty points by 1 point per ₹1 spent', status: 'PASS' },
   { id: 'FT-13', domain: 'Functional', name: 'COGS Accounting on Sale', scope: 'Captures purchase unit cost at checkout time', expected: 'Calculates accurate COGS for P&L margin analysis', status: 'PASS' },
   { id: 'FT-14', domain: 'Functional', name: 'Operating Expense Logging', scope: 'Records category OpEx entry', expected: 'Deducts from store Net Operating Profit', status: 'PASS' },
   { id: 'FT-15', domain: 'Functional', name: 'Manual Physical Count Adjustment', scope: 'Audit delta adjustment logged', expected: 'Appends ADJUSTMENT entry into immutable ledger', status: 'PASS' },

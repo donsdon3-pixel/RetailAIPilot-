@@ -1,5 +1,6 @@
 import { MCPTools, DataContext } from './mcp-tools';
 import { AppStore } from './store';
+import { formatCurrency } from './format';
 
 export interface AIMessage {
   id: string;
@@ -69,11 +70,11 @@ export class AIService {
       if (toolResult.length === 0) {
         assistantReply = `Live database audit confirms no inventory has remained dormant without sales for >60 days across your organization.`;
       } else {
-        assistantReply = `Live inventory audit identified **${toolResult.length} high-value stagnant SKU(s)** with zero sales in >60 days, representing **$${totalCapital.toFixed(2)}** in tied-up working capital:\n\n` +
+        assistantReply = `Live inventory audit identified **${toolResult.length} high-value stagnant SKU(s)** with zero sales in >60 days, representing **${formatCurrency(totalCapital)}** in tied-up working capital:\n\n` +
           toolResult
             .map(
               (i: any) =>
-                `• **${i.name}** (\`${i.sku}\`): **${i.current_stock} units** dormant for **${i.days_without_sale} days** ($${i.tied_up_capital.toFixed(2)} capital). Recommended Strategy: _${i.liquidation_action}_ at ${i.suggested_discount_percent}% off.`
+                `• **${i.name}** (\`${i.sku}\`): **${i.current_stock} units** dormant for **${i.days_without_sale} days** (${formatCurrency(i.tied_up_capital)} capital). Recommended Strategy: _${i.liquidation_action}_ at ${i.suggested_discount_percent}% off.`
             )
             .join('\n') +
           `\n\n**Actionable Advice:** Reclaim liquidity by pushing these clearance discounts to VIP loyalty members or activating an in-store endcap promotion.`;
@@ -91,13 +92,13 @@ export class AIService {
       toolResult = MCPTools.getProfitability(context, params);
 
       assistantReply = `Here is the verified financial profitability breakdown for **${toolResult.store_name}** (August 2026):\n\n` +
-        `• **Gross Sales Revenue:** $${toolResult.gross_sales.toFixed(2)}\n` +
-        `• **Cost of Goods Sold (COGS):** $${toolResult.cogs.toFixed(2)}\n` +
-        `• **Gross Profit:** $${toolResult.gross_profit.toFixed(2)} (**${toolResult.gross_margin_percent}% Gross Margin**)\n` +
-        `• **Store Operating Expenses (OpEx):** $${toolResult.operating_expenses.toFixed(2)}\n` +
-        `• **Net Operating Profit:** **$${toolResult.net_profit.toFixed(2)}** (**${toolResult.net_margin_percent}% Net Margin**)\n\n` +
+        `• **Gross Sales Revenue:** ${formatCurrency(toolResult.gross_sales)}\n` +
+        `• **Cost of Goods Sold (COGS):** ${formatCurrency(toolResult.cogs)}\n` +
+        `• **Gross Profit:** ${formatCurrency(toolResult.gross_profit)} (**${toolResult.gross_margin_percent}% Gross Margin**)\n` +
+        `• **Store Operating Expenses (OpEx):** ${formatCurrency(toolResult.operating_expenses)}\n` +
+        `• **Net Operating Profit:** **${formatCurrency(toolResult.net_profit)}** (**${toolResult.net_margin_percent}% Net Margin**)\n\n` +
         `**Top Expense Drivers:**\n` +
-        toolResult.expense_breakdown.map((e: any) => `  - ${e.category}: $${e.amount.toFixed(2)}`).join('\n');
+        toolResult.expense_breakdown.map((e: any) => `  - ${e.category}: ${formatCurrency(e.amount)}`).join('\n');
     } else if (
       lower.includes('supplier') ||
       lower.includes('payable') ||
@@ -114,12 +115,12 @@ export class AIService {
       const urgentCount = toolResult.filter((r: any) => r.escalation_status !== 'NORMAL').length;
 
       assistantReply = `Analyzed Accounts Payable across all registered suppliers for your organization:\n\n` +
-        `• **Total Outstanding Payables:** $${totalBalance.toFixed(2)}\n` +
+        `• **Total Outstanding Payables:** ${formatCurrency(totalBalance)}\n` +
         `• **Suppliers Requiring Attention (<48h or Overdue):** ${urgentCount}\n\n` +
         toolResult
           .map(
             (s: any) =>
-              `• **${s.supplier_name}**: Balance **$${s.outstanding_balance.toFixed(2)}** | Status: **[${s.escalation_status}]** (Due: ${s.nearest_due_date}, Credit Terms: ${s.credit_period_days} days). Contact: ${s.contact_person} (${s.phone}).`
+              `• **${s.supplier_name}**: Balance **${formatCurrency(s.outstanding_balance)}** | Status: **[${s.escalation_status}]** (Due: ${s.nearest_due_date}, Credit Terms: ${s.credit_period_days} days). Contact: ${s.contact_person} (${s.phone}).`
           )
           .join('\n') +
         `\n\n**Actionable Advice:** Process payments for urgent vendors to preserve favorable 30-45 day net credit terms and prevent delivery stops.`;
@@ -130,14 +131,14 @@ export class AIService {
       toolResult = MCPTools.generateBusinessReport(context, params);
 
       assistantReply = `Generated comprehensive executive operational diagnostic for **${toolResult.organization_name}** (${toolResult.period_month}):\n\n` +
-        `• **Total Gross Revenue:** $${toolResult.total_revenue.toFixed(2)}\n` +
-        `• **Total COGS:** $${toolResult.total_cogs.toFixed(2)}\n` +
-        `• **Total Operating Expenses:** $${toolResult.total_opex.toFixed(2)}\n` +
-        `• **Net Operating Profit:** **$${toolResult.net_profit.toFixed(2)}**\n` +
-        `• **Total Inventory Valuation:** $${toolResult.inventory_asset_valuation.toFixed(2)}\n` +
-        `• **Stagnant Dead Capital at Risk:** $${toolResult.dead_stock_capital_at_risk.toFixed(2)} (${toolResult.low_stock_sku_count} low-stock SKUs flagged)\n\n` +
+        `• **Total Gross Revenue:** ${formatCurrency(toolResult.total_revenue)}\n` +
+        `• **Total COGS:** ${formatCurrency(toolResult.total_cogs)}\n` +
+        `• **Total Operating Expenses:** ${formatCurrency(toolResult.total_opex)}\n` +
+        `• **Net Operating Profit:** **${formatCurrency(toolResult.net_profit)}**\n` +
+        `• **Total Inventory Valuation:** ${formatCurrency(toolResult.inventory_asset_valuation)}\n` +
+        `• **Stagnant Dead Capital at Risk:** ${formatCurrency(toolResult.dead_stock_capital_at_risk)} (${toolResult.low_stock_sku_count} low-stock SKUs flagged)\n\n` +
         `**Top Selling Products:**\n` +
-        toolResult.top_selling_skus.map((t: any) => `  - ${t.name} (\`${t.sku}\`): $${t.revenue.toFixed(2)} (${t.units} units)`).join('\n') +
+        toolResult.top_selling_skus.map((t: any) => `  - ${t.name} (\`${t.sku}\`): ${formatCurrency(t.revenue)} (${t.units} units)`).join('\n') +
         `\n\n**Autonomous Strategic AI Recommendations:**\n` +
         toolResult.strategic_ai_recommendations.map((r: string) => `1. ${r}`).join('\n');
     }

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppStore, AppState } from '@/lib/store';
 import { SalesOrder, ReturnOrder } from '@/lib/types';
+import { formatCurrency } from '@/lib/format';
 import {
   Receipt,
   RotateCcw,
@@ -133,10 +134,10 @@ export default function SalesHistoryPage() {
                     {sale.items.map((i) => `${i.product_name} (${i.quantity})`).join(', ')}
                   </td>
                   <td className="p-3.5 text-slate-600 font-mono text-[11px]">
-                    {sale.payments.map((p) => `${p.payment_method}: $${p.amount}`).join(' + ')}
+                    {sale.payments.map((p) => `${p.payment_method}: ${formatCurrency(p.amount)}`).join(' + ')}
                   </td>
                   <td className="p-3.5 text-right font-mono font-bold text-slate-900 text-sm">
-                    ${sale.total_amount.toFixed(2)}
+                    {formatCurrency(sale.total_amount)}
                   </td>
                   <td className="p-3.5 text-center">
                     <span
@@ -191,7 +192,7 @@ export default function SalesHistoryPage() {
               </div>
               <div className="flex justify-between">
                 <span>Original Sale Price:</span>
-                <span className="font-mono font-bold">${selectedOrder.items[0]?.unit_price.toFixed(2)}</span>
+                <span className="font-mono font-bold">{formatCurrency(selectedOrder.items[0]?.unit_price || 0)}</span>
               </div>
             </div>
 
@@ -237,7 +238,7 @@ export default function SalesHistoryPage() {
               <div className="p-3 rounded-xl bg-emerald-50 text-emerald-900 font-bold flex justify-between">
                 <span>Refund Amount Due to Customer:</span>
                 <span className="font-mono">
-                  ${((selectedOrder.items[0]?.unit_price || 0) * returnQty).toFixed(2)}
+                  {formatCurrency((selectedOrder.items[0]?.unit_price || 0) * returnQty)}
                 </span>
               </div>
             </div>

@@ -14,6 +14,7 @@ import {
   Organization,
 } from './types';
 import { LedgerService } from './ledger-service';
+import { formatCurrency } from './format';
 
 export interface DataContext {
   organizations: Organization[];
@@ -322,8 +323,8 @@ export class MCPTools {
       top_selling_skus: topSelling,
       strategic_ai_recommendations: [
         `Initiate immediate branch transfer for ${lowStock.length} critically low SKUs from Midtown surplus to Downtown Flagship.`,
-        `Execute a flash clearance or supplier return for $${deadCapital.toFixed(2)} tied up in stagnant items (>60 days).`,
-        `Prioritize payment authorization of $${apLiability.toFixed(2)} to secure vendor volume rebates and prevent shipment holds.`,
+        `Execute a flash clearance or supplier return for ${formatCurrency(deadCapital)} tied up in stagnant items (>60 days).`,
+        `Prioritize payment authorization of ${formatCurrency(apLiability)} to secure vendor volume rebates and prevent shipment holds.`,
         `Expand stock allocation for highest velocity category (Fresh Produce & Cold Brews) yielding 58% gross margin.`
       ],
     };

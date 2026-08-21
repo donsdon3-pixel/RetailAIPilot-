@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { AIService } from '../lib/ai-service';
 import { MCPTools } from '../lib/mcp-tools';
 import { AppStore } from '../lib/store';
+import { formatCurrency } from '../lib/format';
 
 describe('AI Agents & MCP Calling Test Suite (5 Cases)', () => {
   it('AI-01: Correct MCP tool triggering when querying low-stock SKUs', async () => {
@@ -20,7 +21,7 @@ describe('AI Agents & MCP Calling Test Suite (5 Cases)', () => {
     const res = await AIService.processQuery('What is our store profitability?', 'org_01', 'store_01');
     expect(res.toolInvocation?.toolName).toBe('get_profitability');
     const profit = res.toolInvocation?.result.gross_sales;
-    expect(res.content).toContain(`$${profit.toFixed(2)}`);
+    expect(res.content).toContain(formatCurrency(profit));
   });
 
   it('AI-04: Mandatory AI Disclaimer is always attached to assistant output', async () => {

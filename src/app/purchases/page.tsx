@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppStore, AppState } from '@/lib/store';
 import { PurchaseOrder, Supplier } from '@/lib/types';
+import { formatCurrency } from '@/lib/format';
 import {
   Truck,
   Plus,
@@ -106,7 +107,7 @@ export default function PurchasesPage() {
               </span>
             </div>
             <div className="mt-2 text-lg font-black text-slate-900 font-mono">
-              ${sup.outstanding_balance.toFixed(2)}
+              {formatCurrency(sup.outstanding_balance)}
             </div>
             <div className="text-[11px] text-slate-500 mt-1">
               Contact: {sup.contact_person} ({sup.phone})
@@ -143,7 +144,7 @@ export default function PurchasesPage() {
                     {po.items.map((i) => `${i.product_name} (${i.quantity_ordered} qty)`).join(', ')}
                   </td>
                   <td className="p-3.5 text-right font-mono font-bold text-slate-900">
-                    ${po.total_amount.toFixed(2)}
+                    {formatCurrency(po.total_amount)}
                   </td>
                   <td className="p-3.5 text-center">
                     <span
@@ -234,7 +235,7 @@ export default function PurchasesPage() {
                 >
                   {orgProducts.map((p) => (
                     <option key={p.id} value={p.id}>
-                      {p.name} (${p.unit_cost} cost)
+                      {p.name} ({formatCurrency(p.unit_cost)} cost)
                     </option>
                   ))}
                 </select>

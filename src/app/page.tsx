@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { AppStore, AppState } from '@/lib/store';
 import { LedgerService } from '@/lib/ledger-service';
 import { MCPTools } from '@/lib/mcp-tools';
+import { formatCurrency } from '@/lib/format';
 import {
   DollarSign,
   TrendingUp,
@@ -132,7 +133,7 @@ export default function DashboardOverview() {
           </div>
           <div className="mt-3">
             <div className="text-2xl font-bold text-slate-900">
-              ${profitability.gross_sales.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              {formatCurrency(profitability.gross_sales)}
             </div>
             <div className="flex items-center gap-1.5 mt-1 text-xs text-emerald-600 font-medium">
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -151,10 +152,10 @@ export default function DashboardOverview() {
           </div>
           <div className="mt-3">
             <div className="text-2xl font-bold text-slate-900">
-              ${profitability.net_profit.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              {formatCurrency(profitability.net_profit)}
             </div>
             <div className="flex items-center gap-1.5 mt-1 text-xs text-slate-500">
-              <span>OpEx: ${profitability.operating_expenses.toFixed(2)}</span>
+              <span>OpEx: {formatCurrency(profitability.operating_expenses)}</span>
             </div>
           </div>
         </div>
@@ -169,7 +170,7 @@ export default function DashboardOverview() {
           </div>
           <div className="mt-3">
             <div className="text-2xl font-bold text-slate-900">
-              ${totalInventoryValuation.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              {formatCurrency(totalInventoryValuation)}
             </div>
             <div className="flex items-center gap-1.5 mt-1 text-xs text-slate-500">
               <span>{stockBalances.length} tracked product SKUs</span>
@@ -195,7 +196,7 @@ export default function DashboardOverview() {
               )}
             </div>
             <div className="flex items-center gap-1.5 mt-1 text-xs text-amber-600">
-              <span>${deadCapital.toFixed(2)} dead capital (&gt;60d)</span>
+              <span>{formatCurrency(deadCapital)} dead capital (&gt;60d)</span>
             </div>
           </div>
         </div>
@@ -314,7 +315,7 @@ export default function DashboardOverview() {
                         {isPositive ? `+${entry.quantity_change}` : entry.quantity_change}
                       </td>
                       <td className="py-2.5 text-right text-slate-600 font-mono">
-                        ${entry.unit_cost.toFixed(2)}
+                        {formatCurrency(entry.unit_cost)}
                       </td>
                       <td className="py-2.5 text-slate-500 text-[11px] max-w-[200px] truncate">
                         {entry.reason || entry.reference_id || 'System Entry'}

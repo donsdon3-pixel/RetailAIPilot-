@@ -21,6 +21,7 @@ import {
   AutomationLog,
   ReturnOrder,
 } from './types';
+import { formatCurrency } from './format';
 import {
   INITIAL_ORGANIZATIONS,
   INITIAL_STORES,
@@ -274,7 +275,7 @@ export class AppStore {
       store_id: returnOrder.store_id,
       alert_type: 'SYSTEM',
       severity: 'INFO',
-      title: `Return Processed: ${returnOrder.return_number} ($${returnOrder.refund_amount.toFixed(2)})`,
+      title: `Return Processed: ${returnOrder.return_number} (${formatCurrency(returnOrder.refund_amount)})`,
       message: `Stock ledger adjusted. Restockable items returned to inventory; damaged items written off.`,
       is_read: false,
       action_url: '/sales',

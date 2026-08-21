@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppStore, AppState } from '@/lib/store';
 import { Customer, Promotion } from '@/lib/types';
+import { formatCurrency } from '@/lib/format';
 import {
   Users,
   Award,
@@ -42,7 +43,7 @@ export default function CustomersPage() {
             Customer Loyalty & Self-Service Portal
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Loyalty point rewards (1 pt / $1), digital invoice archives, and personalized AI promotions.
+            Loyalty point rewards (1 pt / ₹1), digital invoice archives, and personalized AI promotions.
           </p>
         </div>
       </div>
@@ -105,7 +106,7 @@ export default function CustomersPage() {
                     {cust.loyalty_points} pts
                   </div>
                   <div className="text-[10px] text-slate-400 font-mono">
-                    ${cust.total_spend.toFixed(2)} spend
+                    {formatCurrency(cust.total_spend)} spend
                   </div>
                 </div>
               </div>
@@ -138,7 +139,7 @@ export default function CustomersPage() {
                     <div className="flex items-center justify-between font-bold">
                       <span className="font-mono text-slate-900">{inv.invoice_number}</span>
                       <span className="font-mono text-emerald-600 font-black text-sm">
-                        ${inv.total_amount.toFixed(2)}
+                        {formatCurrency(inv.total_amount)}
                       </span>
                     </div>
                     <div className="text-[11px] text-slate-500">
@@ -148,7 +149,7 @@ export default function CustomersPage() {
                       {inv.items.map((it) => (
                         <div key={it.id} className="flex justify-between py-0.5">
                           <span>{it.product_name} x {it.quantity}</span>
-                          <span className="font-mono">${it.subtotal.toFixed(2)}</span>
+                          <span className="font-mono">{formatCurrency(it.subtotal)}</span>
                         </div>
                       ))}
                     </div>

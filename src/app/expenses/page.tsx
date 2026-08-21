@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppStore, AppState } from '@/lib/store';
 import { MCPTools } from '@/lib/mcp-tools';
+import { formatCurrency, CURRENCY_SYMBOL } from '@/lib/format';
 import {
   DollarSign,
   Plus,
@@ -61,9 +62,9 @@ export default function ExpensesPage() {
             Operating Expenses & P&L Margin Tracking
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Computes Net Operating Profit = Gross Sales Revenue ($
-            {profitability.gross_sales.toFixed(2)}) &minus; COGS (${profitability.cogs.toFixed(2)}) &minus; OpEx ($
-            {profitability.operating_expenses.toFixed(2)}).
+            Computes Net Operating Profit = Gross Sales Revenue (
+            {formatCurrency(profitability.gross_sales)}) &minus; COGS ({formatCurrency(profitability.cogs)}) &minus; OpEx (
+            {formatCurrency(profitability.operating_expenses)}).
           </p>
         </div>
 
@@ -84,7 +85,7 @@ export default function ExpensesPage() {
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <span className="text-xs text-slate-500 font-medium">Gross Revenue</span>
           <div className="text-xl font-black text-slate-900 font-mono mt-1">
-            ${profitability.gross_sales.toFixed(2)}
+            {formatCurrency(profitability.gross_sales)}
           </div>
           <div className="text-[11px] text-emerald-600 font-semibold mt-1">100% Invoiced</div>
         </div>
@@ -92,7 +93,7 @@ export default function ExpensesPage() {
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <span className="text-xs text-slate-500 font-medium">Cost of Goods Sold (COGS)</span>
           <div className="text-xl font-black text-slate-900 font-mono mt-1">
-            ${profitability.cogs.toFixed(2)}
+            {formatCurrency(profitability.cogs)}
           </div>
           <div className="text-[11px] text-slate-500 mt-1">Direct item purchase costs</div>
         </div>
@@ -100,7 +101,7 @@ export default function ExpensesPage() {
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <span className="text-xs text-slate-500 font-medium">Operating Expenses (OpEx)</span>
           <div className="text-xl font-black text-rose-600 font-mono mt-1">
-            ${profitability.operating_expenses.toFixed(2)}
+            {formatCurrency(profitability.operating_expenses)}
           </div>
           <div className="text-[11px] text-slate-500 mt-1">Rent, payroll & utilities</div>
         </div>
@@ -108,7 +109,7 @@ export default function ExpensesPage() {
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <span className="text-xs text-slate-500 font-medium">Net Operating Profit</span>
           <div className="text-xl font-black text-emerald-600 font-mono mt-1">
-            ${profitability.net_profit.toFixed(2)}
+            {formatCurrency(profitability.net_profit)}
           </div>
           <div className="text-[11px] text-emerald-700 font-bold mt-1">
             {profitability.net_margin_percent}% Net Margin
@@ -140,7 +141,7 @@ export default function ExpensesPage() {
                   <td className="p-3.5 font-bold text-slate-900">{exp.title}</td>
                   <td className="p-3.5 text-slate-500 text-[11px]">{exp.notes || '—'}</td>
                   <td className="p-3.5 text-right font-mono font-bold text-slate-900">
-                    ${exp.amount.toFixed(2)}
+                    {formatCurrency(exp.amount)}
                   </td>
                 </tr>
               ))}
@@ -188,7 +189,7 @@ export default function ExpensesPage() {
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Amount ($):</label>
+                <label className="font-bold text-slate-700 block mb-1">Amount ({CURRENCY_SYMBOL}):</label>
                 <input
                   type="number"
                   step="0.01"

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { AppStore, AppState } from '@/lib/store';
 import { LedgerService } from '@/lib/ledger-service';
 import { TransferStatus, Product, StockTransfer } from '@/lib/types';
+import { formatCurrency } from '@/lib/format';
 import {
   Boxes,
   ArrowRightLeft,
@@ -240,10 +241,10 @@ export default function InventoryLedgerPage() {
                     <td className="p-3.5 font-semibold text-slate-800">{item.product_name}</td>
                     <td className="p-3.5 text-slate-500">{item.category_name || 'General'}</td>
                     <td className="p-3.5 text-right font-mono text-slate-600">
-                      ${item.unit_cost.toFixed(2)}
+                      {formatCurrency(item.unit_cost)}
                     </td>
                     <td className="p-3.5 text-right font-mono font-bold text-slate-900">
-                      ${item.selling_price.toFixed(2)}
+                      {formatCurrency(item.selling_price)}
                     </td>
                     <td className="p-3.5 text-right font-mono text-slate-500">
                       {item.reorder_point} units
@@ -260,7 +261,7 @@ export default function InventoryLedgerPage() {
                       </span>
                     </td>
                     <td className="p-3.5 text-right font-mono font-bold text-slate-800">
-                      ${item.total_inventory_valuation.toFixed(2)}
+                      {formatCurrency(item.total_inventory_valuation)}
                     </td>
                     <td className="p-3.5 text-center">
                       {item.current_stock <= item.reorder_point ? (
@@ -340,10 +341,10 @@ export default function InventoryLedgerPage() {
                         {isPositive ? `+${entry.quantity_change}` : entry.quantity_change}
                       </td>
                       <td className="p-3.5 text-right font-mono text-slate-600">
-                        ${entry.unit_cost.toFixed(2)}
+                        {formatCurrency(entry.unit_cost)}
                       </td>
                       <td className="p-3.5 text-right font-mono font-bold text-slate-900">
-                        ${entry.total_cost.toFixed(2)}
+                        {formatCurrency(entry.total_cost)}
                       </td>
                       <td className="p-3.5 text-slate-600 text-[11px] max-w-xs">
                         <div className="font-semibold text-slate-800">{entry.created_by_name || entry.created_by || 'System'}</div>
