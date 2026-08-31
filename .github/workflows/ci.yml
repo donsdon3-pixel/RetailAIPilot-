@@ -1,0 +1,42 @@
+name: RetailPilot AI CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Setup Environment
+        run: |
+          cat << 'EOF' > .env.local
+          NEXT_PUBLIC_SUPABASE_URL=https://ksrfetzwldnrefebnonj.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzcmZldHp3bGRucmVmZWJub25qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcxOTU3NzQsImV4cCI6MjEwMjc3MTc3NH0.ssQHErHd2NCHDdsOvZsmUAnFxc9DFM_-7kfNXus1o1k
+          SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzcmZldHp3bGRucmVmZWJub25qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzE5NTc3NCwiZXhwIjoyMTAyNzcxNzc0fQ.xE6e3oKwhn-BIMSfIRKU9QAHL9vzebV8VqWfrMvyIz4
+          NEXT_PUBLIC_AI_MODEL=gemini-2.0-flash
+          NEXT_PUBLIC_APP_URL=https://retail-ai-pilot.vercel.app
+          NEXT_PUBLIC_DEFAULT_ORG_ID=org_01
+          NEXT_PUBLIC_DEFAULT_STORE_ID=store_01
+          EOF
+
+      - name: Run 50 QA Test Cases (Vitest)
+        run: npm test
+
+      - name: Build Next.js Production App
+        run: npm run build

@@ -1,0 +1,19 @@
+# RetailPilot AI
+
+> RetailPilot AI is an autonomous, multi-tenant Retail Operations ERP and Cloud POS SaaS platform featuring PostgreSQL Row Level Security (RLS) and Model Context Protocol (MCP) integrations.
+
+## Core Pages
+
+- [Login & Sandbox Authenticator](https://retail-ai-pilot.vercel.app/login): 1-Click persona authentication sandbox for RBAC role testing.
+- [Main Dashboard](https://retail-ai-pilot.vercel.app/): Real-time retail analytics, sales performance, and executive metrics.
+- [AI Assistant & MCP Inspector](https://retail-ai-pilot.vercel.app/ai-assistant): Autonomous AI business assistant executing live database queries via Model Context Protocol tools.
+- [Automations Engine](https://retail-ai-pilot.vercel.app/automations): Background workflow management for low-stock alerts, dead-stock audits, and EOD dossiers.
+- [Inventory Ledger](https://retail-ai-pilot.vercel.app/inventory): Immutable 5-stage inventory ledger and branch-to-branch stock transfer management.
+- [Purchase Orders](https://retail-ai-pilot.vercel.app/purchases): Supplier procurement, accounts payable tracking, and goods receipt notes (GRN).
+- [Admin & RLS Simulator](https://retail-ai-pilot.vercel.app/admin): Multi-tenant organization manager and cross-tenant security policy attack simulator.
+- [QA Testing Matrix](https://retail-ai-pilot.vercel.app/qa): Comprehensive suite of 50+ automated functional, API, security, and UI test cases.
+
+## Documentation & API Endpoints
+
+- [Source Repository](https://github.com/donsdon3-pixel/RetailAIPilot-): Official GitHub source repository with full SDLC documentation and Supabase schema definitions.
+- [Model Context Protocol Endpoint](https://retail-ai-pilot.vercel.app/api/mcp): Live JSON-RPC 2.0 endpoint for MCP tool execution.
